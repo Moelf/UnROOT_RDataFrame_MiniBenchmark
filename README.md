@@ -1,4 +1,14 @@
 ## Benchmark Summary
+
+## Results:
+### Single-threaded (cold run, first Julia, then RDF):
+- Julia: 22.3 s
+- ROOT: 41.2 s
+
+### 4 threads (same condition):
+- Julia: 9.6 s
+- ROOT: 11.8 s
+
 ### Hardware:
 - AMD Ryzen 9 3900X (24) @ 3.800GHz
 - Samsung SSD 860 NVMe
@@ -35,13 +45,3 @@ julia> mytree
 5. Each Z-candidate muon pair must **not** have `dR < 0.02`.
 6. Compute the two Z bosons' masses and require first to be between 40,120 GeV, the second between 12,120 GeV.
 7. Compute Higgs' mass and fill Histogram.
-
-## Results:
-
-### Single-threaded (cold run, first Julia, then RDF):
-- Julia: 22.3 s
-- ROOT: 41.2 s
-
-### 4 threads (same condition):
-- Julia: 9.6 s
-- ROOT: 11.8 s
