@@ -1,4 +1,4 @@
-## Benchmark Summary
+# Benchmark Summary
 
 ## Results:
 ### Single-threaded (cold run, first Julia, then RDF):
@@ -9,7 +9,7 @@
 - Julia: 9.6 s
 - ROOT: 11.8 s
 
-### Hardware:
+## Hardware:
 - AMD Ryzen 9 3900X (24) @ 3.800GHz
 - Samsung SSD 860 NVMe
 - 64GB Main Memory
@@ -26,7 +26,7 @@
 ## Physics Task:
 Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)
 
-### Data:
+## Data:
 ```julia
 julia> mytree
  Row │ nMuon   Muon_pt           Muon_eta          Muon_phi          Muon_mass         Muon_charge     
@@ -37,7 +37,7 @@ julia> mytree
  3   │ 1       Float32[3.275326  Float32[2.210855  Float32[-1.22341  Float32[0.105658  Int32[1]
 ```
 
-### Procedure
+## Procedure
 1. `nMuon == 4`.
 2. All muon has `pt > 5` and `abs(eta) < 2.4`.
 3. Sum of `Muon_charge` equals 0.
