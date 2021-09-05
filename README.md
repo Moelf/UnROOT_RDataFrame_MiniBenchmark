@@ -9,7 +9,7 @@
 - Julia: 9.6 s
 - ROOT: 11.8 s
 
-(all heavy lifting functions used by RDataFrame are wriotten in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/df103_NanoAODHiggsAnalysis_python.h))
+(all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/df103_NanoAODHiggsAnalysis_python.h))
 
 ## Hardware:
 - AMD Ryzen 9 3900X (24) @ 3.800GHz
