@@ -13,8 +13,8 @@
 
 ## Hardware:
 - AMD Ryzen 9 3900X (24) @ 3.800GHz
-- Samsung SSD 860 NVMe
-- 64GB Main Memory
+- Intel 660P SSD
+- 64GB Main Memory @ 3000 MHz
 
 ```julia
 (JuliaHEPBenchmarkRDF) pkg> st
