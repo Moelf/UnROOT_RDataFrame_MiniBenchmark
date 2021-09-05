@@ -2,6 +2,7 @@
 ### Hardware:
 - AMD Ryzen 9 3900X (24) @ 3.800GHz
 - Samsung SSD 860 NVMe
+- 64GB Main Memory
 
 ```julia
 (JuliaHEPBenchmarkRDF) pkg> st
@@ -12,6 +13,28 @@
   [3a55db76] LVCyl v0.1.0 `https://github.com/JuliaHEP/LVCyl.jl#master`
   [3cd96dde] UnROOT v0.4.0
 ```
+## Physics Task:
+Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)
+
+### Data:
+```julia
+julia> mytree
+ Row │ nMuon   Muon_pt           Muon_eta          Muon_phi          Muon_mass         Muon_charge     
+     │ UInt32  SubArray{Float3   SubArray{Float3   SubArray{Float3   SubArray{Float3   SubArray{Int32, 
+─────┼─────────────────────────────────────────────────────────────────────────────────────────────────
+ 1   │ 2       Float32[10.76369  Float32[1.066827  Float32[-0.03427  Float32[0.105658  Int32[-1, -1]
+ 2   │ 2       Float32[10.53849  Float32[-0.42778  Float32[-0.27479  Float32[0.105658  Int32[1, -1]
+ 3   │ 1       Float32[3.275326  Float32[2.210855  Float32[-1.22341  Float32[0.105658  Int32[1]
+```
+
+### Procedure
+1. `nMuon == 4`.
+2. All muon has `pt > 5` and `abs(eta) < 2.4`.
+3. Sum of `Muon_charge` equals 0.
+4. Get the `Z_idx = [[idx1, idx2], [idx3, idx4]]` which represent two pairs of Z-candidate muons.
+5. Each Z-candidate muon pair must **not** have `dR < 0.02`.
+6. Compute the two Z bosons' masses and require first to be between 40,120 GeV, the second between 12,120 GeV.
+7. Compute Higgs' mass and fill Histogram.
 
 ## Results:
 
