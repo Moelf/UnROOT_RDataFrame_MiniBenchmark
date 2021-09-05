@@ -27,6 +27,7 @@
 Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)
 
 ## Data:
+http://opendata.web.cern.ch/record/12341
 ```julia
 julia> mytree
  Row │ nMuon   Muon_pt           Muon_eta          Muon_phi          Muon_mass         Muon_charge     
@@ -38,6 +39,7 @@ julia> mytree
 ```
 
 ## Procedure
+minimized based on: https://root.cern/doc/master/df103__NanoAODHiggsAnalysis_8py.html
 1. `nMuon == 4`.
 2. All muon has `pt > 5` and `abs(eta) < 2.4`.
 3. Sum of `Muon_charge` equals 0.
