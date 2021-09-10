@@ -7,24 +7,29 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 - [ROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb): 41.2 s
 
 ### 4 threads (same condition):
-- Julia: 9.6 s
-- ROOT: 11.8 s
+- Julia: 23.12 s
+- ROOT: 37.4 s
 
 (all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/df103_NanoAODHiggsAnalysis_python.h))
 
-## Hardware:
-- AMD Ryzen 9 3900X (24) @ 3.800GHz
-- Intel 660P SSD
+## Specs:
+```
+Julia Version 1.7.0-beta4
+Commit d0c90f37ba (2021-08-24 12:35 UTC)
+Platform Info:
+  OS: Linux (x86_64-pc-linux-gnu)
+  CPU: Intel(R) Xeon(R) W-2265 CPU @ 3.50GHz
+```
 - 64GB Main Memory @ 3000 MHz
 
 ```julia
-(JuliaHEPBenchmarkRDF) pkg> st
-     Project JuliaHEPBenchmarkRDF v0.1.0
-      Status `~/Documents/github/JuliaHEPBenchmarkRDF/Project.toml`
-  [68837c9b] FHist v0.6.0
+(UnROOT_RDataFrame_MiniBenchmark) pkg> st
+      Status `/home/jiling/UnROOT_RDataFrame_MiniBenchmark/Project.toml`
+  [68837c9b] FHist v0.6.1
   [7073ff75] IJulia v1.23.2
   [3a55db76] LVCyl v0.1.0 `https://github.com/JuliaHEP/LVCyl.jl#master`
-  [3cd96dde] UnROOT v0.4.0
+  [f517fe37] Polyester v0.4.2
+  [3cd96dde] UnROOT v0.5.1
 ```
 ## Physics Task:
 Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)
