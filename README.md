@@ -3,12 +3,12 @@
 See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks) for comparing mostly the read/interpretation speed between ROOT and Julia.
 ## Results:
 ### Single-threaded (cold run, first Julia, then RDF):
-- [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 22.3 s
-- [ROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb): 41.2 s
+- [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 23.12 s
+- [ROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) (PyROOT): 37.4 s
 
 ### 4 threads (same condition):
-- Julia: 23.12 s
-- ROOT: 37.4 s
+- Julia: 6.70 s
+- ROOT (PyROOT): 21.6 s
 
 (all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/df103_NanoAODHiggsAnalysis_python.h))
 
