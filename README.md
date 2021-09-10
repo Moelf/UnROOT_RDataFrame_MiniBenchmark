@@ -1,5 +1,6 @@
 # Benchmark Summary
 
+See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks) for comparing mostly the read/interpretation speed between ROOT and Julia.
 ## Results:
 ### Single-threaded (cold run, first Julia, then RDF):
 - [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 22.3 s
