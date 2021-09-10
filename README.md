@@ -4,7 +4,7 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 ## Results:
 ### Single-threaded (cold run, first Julia, then RDF):
 - [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 23.12 s
-- [ROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) (PyROOT): 37.4 s
+- [ROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) (PyROOT): 37.2 s
 
 ### 4 threads (same condition):
 - Julia: 6.70 s
