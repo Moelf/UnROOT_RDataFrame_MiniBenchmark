@@ -64,6 +64,12 @@ void simple() {
 
 Run with `root -b -q -l -n simple.C` (interpreted) or `root -b -q -l -n simple.C+` (compiled)
 
+Note that changing `void simple()` to `int main()` and then compiling with 
+```bash
+time g++ simple.cpp -O2 `root-config --cflags --glibs` && ./a.out
+```
+gives the same times as running with `root simple.C+`
+
 ### Python (`uproot`)
 
 ```python
