@@ -70,6 +70,41 @@ time g++ simple.cpp -O2 `root-config --cflags --glibs` && ./a.out
 ```
 gives the same times as running with `root simple.C+`
 
+### C++ (ROOT with `SetAddress`)
+
+```cpp
+#include "TFile.h"
+#include "TH1F.h"
+#include "TTreeReader.h"
+#include "TTreeReaderArray.h"
+#include "TStopwatch.h"
+#include <iostream>
+
+void simple() {
+   TFile *f = TFile::Open("../uncompressed_Run2012BC_DoubleMuParked_Muons.root");
+   TTree *tree = (TTree*)(f->Get("Events"));
+   float Muon_pt_[30];
+   TBranch *b_Muon_pt_ = tree->GetBranch("Muon_pt");
+   b_Muon_pt_->SetAddress(&Muon_pt_);
+   float s = 0.0;
+
+   TStopwatch timer;
+   timer.Start();
+   for (unsigned int ievt=0; ievt<tree->GetEntries(); ievt++) {
+       size_t nbytes = b_Muon_pt_->GetEntry(ievt);
+       size_t nmu = nbytes/sizeof(Muon_pt_[0]);
+       for (size_t imu=0; imu<nmu; imu++) {
+           s += Muon_pt_[imu];
+       }
+   }
+   timer.Stop();
+   timer.Print();
+   std::cout << s << std::endl;
+}
+```
+
+Run with`root -b -q -l -n simple.C+` (compiled)
+
 ### Python (`uproot`)
 
 ```python
@@ -90,10 +125,10 @@ print(t1-t0)
 
 Numbers are warm/after a couple of sequential runs.
 
-|              | julia (s) | ROOT interpreted (s) | ROOT compiled (s) | uproot (s) |
-| ------------ | --------- | -------------------- | ----------------- | ---------- |
-| uncompressed | 2.585     | 11.200               | 7.260             | 2.062      |
-| zlib         | 7.634     | 15.560               | 11.730            | 6.789      |
-| lzma         | 45.045    | 52.660               | 49.550            | 43.612     |
-| lz4          | 3.987     | 11.300               | 7.620             | 2.917      |
+|              | julia (s) | ROOT `TTreeReader` interpreted (s) | ROOT `TTreeReader` compiled (s) | ROOT `SetAddress` compiled (s) | uproot (s) |
+| ------------ | --------- | ---------------------------------- | ------------------------------- | ------------------------------ | ---------- |
+| uncompressed | 2.585     | 11.200                             | 7.260                           | 3.610                          | 2.062      |
+| zlib         | 7.634     | 15.560                             | 11.730                          | 8.110                          | 6.789      |
+| lzma         | 45.045    | 52.660                             | 49.550                          | 45.520                         | 43.612     |
+| lz4          | 3.987     | 11.300                             | 7.620                           | 3.740                          | 2.917      |
 
