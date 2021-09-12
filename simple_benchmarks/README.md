@@ -2,8 +2,8 @@
 ### Simple benchmark
 
 Compute the sum of floats in a single jagged branch over many events.
-Compare julia, C++, and Python an files with no compression, ZLIB, LZ4, and LZMA.
-The scripts are pasted below and included in this directory as well.
+Compare julia, C++, and Python using files with no compression, ZLIB, LZ4, and LZMA.
+The short scripts are shown below.
 
 ### Tree information
 
@@ -105,6 +105,34 @@ void simple() {
 
 Run with`root -b -q -l -n simple.C+` (compiled)
 
+### C++ (ROOT with `RDataFrame`)
+
+```cpp
+#include <ROOT/RDataFrame.hxx>
+#include <ROOT/RVec.hxx>
+#include <TFile.h>
+#include <TStopwatch.h>
+int main() {
+   // ROOT::EnableImplicitMT();
+   auto df = ROOT::RDataFrame("Events", "uncompressed_Run2012BC_DoubleMuParked_Muons.root");
+   auto out = (df
+           .Define("sumpt", [](ROOT::RVec<float> &pts) { return Sum(pts); }, {"Muon_pt"})
+           .Sum("sumpt")
+           );
+  TStopwatch sw;
+  sw.Start();
+  std::cout << out.GetValue() << std::endl;
+  sw.Stop();
+  sw.Print("m");
+}
+```
+
+Compiled with 
+
+```bash
+time g++ simple.cpp -O2 `root-config --cflags --glibs`
+```
+
 ### Python (`uproot`)
 
 ```python
@@ -123,12 +151,14 @@ print(t1-t0)
 
 ### Results
 
-Numbers are warm/after a couple of sequential runs.
+Times are in seconds and were collected warm/after a couple of sequential runs. Variation of roughly 5-10% on the timings.
 
-|              | julia (s) | ROOT `TTreeReader` interpreted (s) | ROOT `TTreeReader` compiled (s) | ROOT `SetAddress` compiled (s) | uproot (s) |
-| ------------ | --------- | ---------------------------------- | ------------------------------- | ------------------------------ | ---------- |
-| uncompressed | 2.585     | 11.200                             | 7.260                           | 3.610                          | 2.062      |
-| zlib         | 7.634     | 15.560                             | 11.730                          | 8.110                          | 6.789      |
-| lzma         | 45.045    | 52.660                             | 49.550                          | 45.520                         | 43.612     |
-| lz4          | 3.987     | 11.300                             | 7.620                           | 3.740                          | 2.917      |
+
+
+|      | julia  | C++ `TTreeReader` interpreted | C++ `TTreeReader` compiled | C++ `SetAddress` compiled | C++ `RDataFrame` compiled | uproot |
+| ---- | ------ | ----------------------------- | -------------------------- | ------------------------- | ------------------------- | ------ |
+| none | 2.585  | 11.200                        | 7.260                      | 3.610                     | 9.150                     | 2.062  |
+| zlib | 7.634  | 15.560                        | 11.730                     | 8.110                     | 13.640                    | 6.789  |
+| lzma | 45.045 | 52.660                        | 49.550                     | 45.520                    | 51.655                    | 43.612 |
+| lz4  | 3.987  | 11.300                        | 7.620                      | 3.740                     | 9.498                     | 2.917  |
 
