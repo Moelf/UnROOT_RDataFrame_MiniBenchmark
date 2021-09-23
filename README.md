@@ -3,14 +3,14 @@
 See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks) for comparing mostly the read/interpretation speed between ROOT and Julia.
 ## Results:
 ### Single-threaded (cold run, first Julia, then RDF):
-- [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 23.12 s
-- [ROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) (PyROOT): 37.2 s
+- [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 20.58 s
+- [PyROOT in Jupyter](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) (PyROOT): 40.21 s
+- Compiled ROOT loop: 28.16 s
+- Compiled ROOT RDataFrame: 19.82 s
 
-### 4 threads (same condition):
-- Julia: 6.70 s
-- ROOT (PyROOT): 21.6 s
+See full results and scripts to verify for yourself: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks 
 
-(all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/df103_NanoAODHiggsAnalysis_python.h))
+(all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/df103_NanoAODHiggsAnalysis_python.h))
 
 ## Specs:
 ```
@@ -23,13 +23,13 @@ Platform Info:
 - 64GB Main Memory @ 3000 MHz
 
 ```julia
-(UnROOT_RDataFrame_MiniBenchmark) pkg> st
-      Status `/home/jiling/UnROOT_RDataFrame_MiniBenchmark/Project.toml`
+(composite_benchmarks) pkg> st
+      Status
   [68837c9b] FHist v0.6.1
   [7073ff75] IJulia v1.23.2
   [3a55db76] LVCyl v0.1.0 `https://github.com/JuliaHEP/LVCyl.jl#master`
-  [f517fe37] Polyester v0.4.2
-  [3cd96dde] UnROOT v0.5.1
+  [f517fe37] Polyester v0.5.1
+  [3cd96dde] UnROOT v0.6.2
 ```
 ## Physics Task:
 Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)
