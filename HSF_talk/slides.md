@@ -14,9 +14,11 @@ In the order of data-flow:
 This set of slides focus on the work done in the UnROOT.jl.
 The main authors at this moment in time are:
 
-- [Nick Amin](https://github.com/aminnj)
+- [Nick Amin](https://github.com/aminnj)[^1]
 - [Tamas Gal](https://github.com/tamasgal) (creator)
 - [Jerry Ling](https://github.com/Moelf)
+
+[^1]: Thanks Nick for the visualizations.
 
 <!-- # Slide 2 title -->
 <!--  Need\\Lang    Julia    Python    C++ -->
@@ -59,6 +61,82 @@ not arranged one next to another in the file. The `TBranch` objects contains the
 beginning of the file) is each basket located, in this particular example 
 first basket starts at 248th byte.
 
+# LazyTree
+When you bundle many branches together, you get a tree.
+Most of the time users are not randomly accessing indices, they **iterate** over the `TTree`.
+![](basketcartoon.pdf)
+
+The underlying baskets of different branches are not aligned in general. We simply cache the
+last-used basket for each branch in RAM (a.k.a basket cache), such that new basket are read/decompressed as needed.
+
+
+# Lazy to the Last Second
+The interface is simple enough:
+```julia
+for evt in mytree
+    if evt.nMuon != 4
+        continue
+    end
+    # access more branches
+end
+```
+`mytree` can have many many branches, and which branches need "access" can dynamically depend on the event content.
+`LazyTree` is designed such that `evt` in the above example is still lazy, no data is read until `evt.nMuon` line.
+
+The `evt` merely keeps track of which `TTree` it comes from and which event number it is, when `evt.nMuon` happens,
+it effectively does `nMuonBranch[evt_idx]`.
+
+# Compostable Multi-Threading
+To enable parallel access of a tree/branch, we only need to make sure the basket cache is thread-local and
+everything else is already thread-friendly:
+```julia
+# from Polyester.jl
+@batch for evt in mytree
+    evt.nMuon < 4 && continue
+    # more stuff
+end
+```
+
+# Compostable Multi-Threading
+During parallel access, threads work on disjoint ranges, roughly speaking if we have 100 events and 4 threads, 
+the 1st thread will work on `1:25`, the last thread will work on `76:100`, avoiding the race-condition in basket access.
+![](basket_parallel_cartoon.pdf.png)
+
+
+# Conclusion and Future Work
+- UnROOT.jl is ready for production around the "analysis" step 
+    - "around", because could do analysis on lower level data, if needed.
+    - fast and integrate seamlessly with Julia ecosystem for tabular processing and multi-threading.
+- The ability to write to `.root` files has not been a priority so far:
+    - almost never performance critical 
+    - not many ecosystem advantages (e.g. no need for AutoDiff to know you're writing to disk)
+    - already can do it via [PyCall.jl](https://github.com/JuliaPy/PyCall.jl) + uproot
+- Low-hanging fruit:
+    - Better `Tables.partitions`, helps writing. (github [issue](https://github.com/tamasgal/UnROOT.jl/issues/114))
+    - Optimize slicing (github [issue](https://github.com/tamasgal/UnROOT.jl/issues/113))
+- Plan to support `xrootd` via [Go-HEP/xrootd](https://hepsoftwarefoundation.org/gsoc/2018/proposal_GoHEPxrootd.html)
+since Go compiles to `ccall()`-able libraries nicely.
+
+# Backup
+
+# Mini Benchmarking {#sec:minibench}
+To understand if we're doing anything "very stupid" in our naive implementation, Nick 
+made some [benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks#results)
+comparing the performance of looping lazily, for different compression algorithm. (We suspect the `zlib`
+library in `stdlib` may not be optimal.) Here's the summary:
+
+
+|      | Julia    | `TTreeReader` interpreted | `TTreeReader` compiled | `SetAddress` compiled | `RDataFrame` compiled |
+| ---- | -------- | ------------------------- | -----------------------| --------------------- | --------------------- |
+| none | 2.084    | 11.200                    | 7.260                  | 3.500                 | 9.150                 |
+| zlib | 7.075    | 15.560                    | 11.730                 | 8.110                 | 13.640                |
+| lz4  | 3.056    | 11.300                    | 7.620                  | 3.740                 | 9.498                 |
+| lzma | 44.718   | 52.660                    | 49.550                 | 45.520                | 51.655                |
+
+Table: Time measured in seconds. "compiled" means `g++ -O2`.
+
+Conclusion: we're probably not doing something super wrong.
+
 # Getting hands on the data
 Despite the overall complexity of `.root` file format, after the metadata extraction, dumping data from one event to the next
 is relatively straightforward.
@@ -79,7 +157,8 @@ data we actually care about are inside `content` and `offsets` (in the case wher
 # Getting hands on the data {#sec:recipe}
 Due to this design, the smallest unit of reading `.root` file is a basket -- you need to read and decompress one
 basket even if you just want one event (because in general partial decompression is impossible, also 
-offsets may be needed). Usually the size of basket is ~ few MB, so it's not an issue to keep the last-used one in RAM.
+offsets may be needed). Usually the size of basket is ~ few MB, so it's not an issue to 
+keep the last-used one in RAM (basket cache).
 
 Thus, the logical steps for reading data are:
 
@@ -121,6 +200,13 @@ and indexing interface.
 But we use [TypedTables.jl](https://github.com/JuliaData/TypedTables.jl) (which supports lazy column
 for the same reason) instead due to one important factor: performance.
 
+# Type Stability of LazyBranch and LazyTree
+$\julia$ includes powerful [inspection tools](https://docs.julialang.org/en/v1/manual/performance-tips/#man-code-warntype)
+you can look at LLVM or assembly. We just want `@code_warntype` and see for ourselves that there's no 
+boxing or instability:
+
+\center![](branch_warntype.png){height=250px}
+
 # Interlude: Type Stability
 Two kinds of type stability:
 
@@ -150,72 +236,3 @@ handling variable of unknown type in a "box" until used, this causes allocation 
 
 This leads us to `TypedTable.jl`, which is a thin wrapper around the built-in `NamedTuple`. It
 retains the type stability of accessing each branch when we put branches together into a tree.
-
-# LazyTree
-Most of the time users are not randomly accessing indices, they **iterate** over the `TTree`.
-For a working example:
-```julia
-for evt in mytree
-    if evt.nMuon < 4
-        continue
-    end
-    # more stuff
-end
-```
-In fact, `mytree` can have many many branches, and which branches to "read" can dynamically depend on the event.
-`LazyTree` is designed such that `evt` in the above example is still lazy, no data is read until `evt.nMuon` line.
-
-The `evt` merely keeps track of which `TTree` it comes from and which event number it is, when `evt.nMuon` happens,
-it effectively does `nMuonBranch[evt_num]`.
-
-# Type Stability of LazyBranch and LazyTree
-$\julia$ includes powerful [inspection tools](https://docs.julialang.org/en/v1/manual/performance-tips/#man-code-warntype)
-you can look at LLVM or assembly. We just want `@code_warntype` and see for ourselves that there's no 
-boxing or instability:
-
-\center![](branch_warntype.png){height=250px}
-
-# Sky is the Limit
-To enable parallel access of a tree/branch, we only need to make sure the basket cache is thread-local and
-everything else is already thread-friendly:
-```julia
-# from Polyester.jl
-@batch for evt in mytree
-    evt.nMuon < 4 && continue
-    # more stuff
-end
-```
-Each thread will work on a range, roughly speaking if we have 100 events and 4 threads, 
-the 1st thread will work on `1:25`, the last thread will work on `76:100`. So we naturally avoided the potential 
-race-condition in basket access.
-
-# Mini Benchmarking {#sec:minibench}
-To understand if we're doing anything "very stupid" in our naive implementation, Nick 
-made some [benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks#results)
-comparing the performance of looping lazily, for different compression algorithm. (We suspect the `zlib`
-library in `stdlib` may not be optimal.) Here's the summary:
-
-
-|      | Julia    | `TTreeReader` interpreted | `TTreeReader` compiled | `SetAddress` compiled | `RDataFrame` compiled |
-| ---- | -------- | ------------------------- | -----------------------| --------------------- | --------------------- |
-| none | 2.084    | 11.200                    | 7.260                  | 3.500                 | 9.150                 |
-| zlib | 7.075    | 15.560                    | 11.730                 | 8.110                 | 13.640                |
-| lz4  | 3.056    | 11.300                    | 7.620                  | 3.740                 | 9.498                 |
-| lzma | 44.718   | 52.660                    | 49.550                 | 45.520                | 51.655                |
-
-Table: Time measured in seconds. "compiled" means `g++ -O2`.
-
-Conclusion: we're probably not doing something super wrong.
-
-# Conclusion and Future Work
-- UnROOT.jl is ready for production around the "analysis" step 
-    - "around", because now one could do analysis on lower level data, if needed.
-    - It's fast and integrate seamlessly with Julia ecosystem for tabular processing and multi-threading.
-- The ability to write to `.root` files has not been a priority so far:
-    - almost never performance critical 
-    - not many ecosystem advantages (e.g. no need for AutoDiff to know you're writing to disk)
-    - already can do it via [PyCall.jl](https://github.com/JuliaPy/PyCall.jl) + uproot
-    - already can write to Apache Arrow via [Arrow.jl](https://github.com/JuliaData/Arrow.jl)
-      for other purpose (such as machine learning). (by "can" we mean the functionality comes for free)
-- We plan to support `xrootd` via [Go-HEP/xrootd](https://hepsoftwarefoundation.org/gsoc/2018/proposal_GoHEPxrootd.html)
-since Go compiles to `ccall()`-able libraries nicely.

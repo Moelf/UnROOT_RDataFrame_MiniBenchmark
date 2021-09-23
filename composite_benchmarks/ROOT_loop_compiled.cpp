@@ -53,11 +53,6 @@ int main() {
 
     }
     timer.Stop();
-    timer.Print();
-    std::cout << s << std::endl;
-    TCanvas C1;
-    hist->Draw();
-    C1.Draw();
-    C1.SaveAs("cpp_loop_bench.png");
+    timer.Print("m");
     return 0;
 }

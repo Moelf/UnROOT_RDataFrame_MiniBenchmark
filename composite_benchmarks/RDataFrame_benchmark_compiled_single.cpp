@@ -5,7 +5,6 @@
 #include <TStopwatch.h>
 
 int main() {
-   ROOT::EnableImplicitMT();
   auto df_bkg_4mu = ROOT::RDataFrame("Events", "Run2012BC_DoubleMuParked_Muons.root");
 
   // Filter interesting events
@@ -41,10 +40,5 @@ int main() {
   sw.Start();
   df_h_bkg_4mu.GetValue();
   sw.Stop();
-  sw.Print();
-
-  TCanvas C1;
-  df_h_bkg_4mu->Draw();
-  C1.Draw();
-  C1.SaveAs("cppbench.png");
+  sw.Print("m");
 }
