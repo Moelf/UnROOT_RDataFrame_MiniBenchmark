@@ -18,7 +18,12 @@ Julia Version 1.7.0-beta4
 Commit d0c90f37ba (2021-08-24 12:35 UTC)
 Platform Info:
   OS: Linux (x86_64-pc-linux-gnu)
-  CPU: Intel(R) Xeon(R) W-2265 CPU @ 3.50GHz
+  CPU: AMD Ryzen 9 3900X 12-Core Processor
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-12.0.1 (ORCJIT, znver2)
+Environment:
+  JULIA_NUM_THREADS = 4
 ```
 - 64GB Main Memory @ 3000 MHz
 
