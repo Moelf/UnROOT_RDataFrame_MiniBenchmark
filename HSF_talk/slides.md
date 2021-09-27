@@ -5,9 +5,10 @@
 In the order of data-flow:
 
 1. Read physics data from `.root` files. ([UnROOT.jl](https://github.com/tamasgal/UnROOT.jl))
-2. Process the data, usually a reduction into histograms. ([FHist.jl](https://github.com/Moelf/FHist.jl))
-3. Tinker with the script/program you wrote, usually for optimization or physics reason, repeat many times. ([Revise.jl](https://github.com/timholy/Revise.jl))
-4. \* Run on accelerator computing resource. ([CUDA.jl](https://github.com/JuliaGPU/CUDA.jl))
+2. Handle [custom classes](#sec:custom) and physics objects ([LVCyl.jl](https://github.com/JuliaHEP/LVCyl.jl))
+3. Process the data, usually a reduction into histograms. ([FHist.jl](https://github.com/Moelf/FHist.jl))
+4. Tinker with the script/program you wrote, usually for optimization or physics reason, repeat many times. ([Revise.jl](https://github.com/timholy/Revise.jl))
+5. \* Run on accelerator computing resource. ([CUDA.jl](https://github.com/JuliaGPU/CUDA.jl))
 
 (Then, add "fast" and "in parallel"(built-in ["green" threads](https://docs.julialang.org/en/v1/manual/multi-threading/)) to all of the above.)
 
@@ -20,15 +21,8 @@ The main authors at this moment in time are:
 
 [^1]: Thanks Nick for the visualizations.
 
-<!-- # Slide 2 title -->
-<!--  Need\\Lang    Julia    Python    C++ -->
-<!-- ------------  -------  --------  ------- -->
-<!--  High-level     Yes     Yes        No -->
-<!--  Fast           Yes     No         Yes -->
-<!--  Threads        Yes     No         Hard -->
-<!--  Dynamic        Yes     Yes        No -->
-
 # State of the UnROOT.jl
+- Used in production at [KM3NeT](https://www.km3net.org/) + 2 LHC detector analysis
 - Reading most used objects and data from root file:
     - TTree, TBranch, TDirectory, TNtuple, TH1/2D
     - Flat, Jagged, Doubly jagged
@@ -62,8 +56,8 @@ beginning of the file) is each basket located, in this particular example
 first basket starts at 248th byte.
 
 # LazyTree
-When you bundle many branches together, you get a tree.
-Most of the time users are not randomly accessing indices, they **iterate** over the `TTree`.
+When you bundle many branches together, you get a tree. Most of the time users are not randomly accessing indices, they **iterate** over the TTree. Baskets are usually small, O(KB) ~ O(MB)
+
 ![](basketcartoon.pdf)
 
 The underlying baskets of different branches are not aligned in general. We simply cache the
@@ -86,7 +80,7 @@ end
 The `evt` merely keeps track of which `TTree` it comes from and which event number it is, when `evt.nMuon` happens,
 it effectively does `nMuonBranch[evt_idx]`.
 
-# Compostable Multi-Threading
+# Composable Multi-Threading
 To enable parallel access of a tree/branch, we only need to make sure the basket cache is thread-local and
 everything else is already thread-friendly:
 ```julia
@@ -97,18 +91,29 @@ everything else is already thread-friendly:
 end
 ```
 
-# Compostable Multi-Threading
+# Composable Multi-Threading
 During parallel access, threads work on disjoint ranges, roughly speaking if we have 100 events and 4 threads, 
 the 1st thread will work on `1:25`, the last thread will work on `76:100`, avoiding the race-condition in basket access.
 ![](basket_parallel_cartoon.pdf.png)
 
+# Custom Class Support {#sec:custom}
+ROOT is immensely feature-rich, and users sometimes need to handle custom data structures when reading .root files.
+UnROOT provides an (beta) interface allowing users to hook into the data parsing in [2 steps](https://tamasgal.github.io/UnROOT.jl/dev/advanced/custom_branch/).
+
+Raw branch data is always available, so the only missing piece is an interpretation function:
+
+1. Provide a `classname` mapping: `Dict("TLorentzVector" => LorentzVector{Float64})`
+2. Specialize (extend) function: `UnROOT.interped_data(rawdata, rawoffsets, ::Type{LVF64}, ::Type{J})`
+3. Profit.
+
+Already being used in KM3NeT for real-time event reconstruction, high-level analysis and time calibration consistency checks.
 
 # Conclusion and Future Work
 - UnROOT.jl is ready for production around the "analysis" step 
     - "around", because could do analysis on lower level data, if needed.
     - fast and integrate seamlessly with Julia ecosystem for tabular processing and multi-threading.
 - The ability to write to `.root` files has not been a priority so far:
-    - almost never performance critical 
+    - usually not performance critical 
     - not many ecosystem advantages (e.g. no need for AutoDiff to know you're writing to disk)
     - already can do it via [PyCall.jl](https://github.com/JuliaPy/PyCall.jl) + uproot
 - Low-hanging fruit:
@@ -117,25 +122,26 @@ the 1st thread will work on `1:25`, the last thread will work on `76:100`, avoid
 - Plan to support `xrootd` via [Go-HEP/xrootd](https://hepsoftwarefoundation.org/gsoc/2018/proposal_GoHEPxrootd.html)
 since Go compiles to `ccall()`-able libraries nicely.
 
-# Backup
+# Backups: Mini Benchmarking {#sec:minibench}
+To understand if we're doing anything "stupid" in our naive implementation, we
+made [benchmarks](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)
+comparing the performance of `UnROOT` with solutions provided by ROOT:
 
-# Mini Benchmarking {#sec:minibench}
-To understand if we're doing anything "very stupid" in our naive implementation, Nick 
-made some [benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks#results)
-comparing the performance of looping lazily, for different compression algorithm. (We suspect the `zlib`
-library in `stdlib` may not be optimal.) Here's the summary:
+|              | Time (s)    |
+| ------------ | ----------- |
+| PyROOT RDataFrame | 40.20  |
+| Compiled for-loop (bind branch) | 28.15 |
+| Compiled RDF | 19.82       |
+| Julia (cold) | 20.58       |
+| Julia (warm) | 19.80       |
+| Compiled RDF (4-threads) | 5.64|
+| Julia (4-threads) | 5.06   |
 
+Table: "Compiled" means `g++ -O2`.
 
-|      | Julia    | `TTreeReader` interpreted | `TTreeReader` compiled | `SetAddress` compiled | `RDataFrame` compiled |
-| ---- | -------- | ------------------------- | -----------------------| --------------------- | --------------------- |
-| none | 2.084    | 11.200                    | 7.260                  | 3.500                 | 9.150                 |
-| zlib | 7.075    | 15.560                    | 11.730                 | 8.110                 | 13.640                |
-| lz4  | 3.056    | 11.300                    | 7.620                  | 3.740                 | 9.498                 |
-| lzma | 44.718   | 52.660                    | 49.550                 | 45.520                | 51.655                |
-
-Table: Time measured in seconds. "compiled" means `g++ -O2`.
-
-Conclusion: we're probably not doing something super wrong.
+Conclusion: we're probably not doing something super bad. It doesn't really matter if Julia is slightly 
+faster or slower than the fully compiled C++ code, the interactivity, flexibility, and being an expressive
+high-level language should make it worthwhile.
 
 # Getting hands on the data
 Despite the overall complexity of `.root` file format, after the metadata extraction, dumping data from one event to the next
@@ -207,7 +213,7 @@ boxing or instability:
 
 \center![](branch_warntype.png){height=250px}
 
-# Interlude: Type Stability
+# Type Stability
 Two kinds of type stability:
 
 1. Can the return type be inferred from just the **types** of the inputs?
@@ -221,7 +227,7 @@ for evt in mytree
 end
 ```
 
-# Interlude: Type Stability
+# Type Stability
 ```julia
 for evt in mytree
     compute(evt.Muon_pt)
