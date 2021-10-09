@@ -153,12 +153,12 @@ print(t1-t0)
 
 ### Results
 
-Times are in seconds and were collected warm/after a couple of sequential runs. Variation of roughly 5-10% on the timings.
+Times are in seconds and were collected warm/after a couple of sequential runs. Variation of roughly <5% on the timings. Times captured on a 2016 MacBook Pro with `julia v1.6.2`, `UnROOT.jl v0.7.1`, `ROOT 6.16`, `uproot 4.0.0`.
 
 |      | julia  | C++ `TTreeReader` interpreted | C++ `TTreeReader` compiled | C++ `SetAddress` compiled | C++ `RDataFrame` compiled | uproot |
 | ---- | ------ | ----------------------------- | -------------------------- | ------------------------- | ------------------------- | ------ |
-| none | 2.084  | 11.200                        | 7.260                      | 3.310                     | 9.150                     | 1.958  |
-| zlib | 7.075  | 15.560                        | 11.730                     | 7.870                     | 13.640                    | 6.569  |
-| lz4  | 3.056  | 11.300                        | 7.620                      | 3.660                     | 9.498                     | 2.797  |
+| none | 1.732  | 11.200                        | 7.260                      | 3.310                     | 9.150                     | 1.958  |
+| zlib | 6.410  | 15.560                        | 11.730                     | 7.870                     | 13.640                    | 6.569  |
+| lz4  | 2.319  | 11.300                        | 7.620                      | 3.660                     | 9.498                     | 2.797  |
 | lzma | 44.718 | 52.660                        | 49.550                     | 45.520                    | 51.655                    | 42.148 |
 
