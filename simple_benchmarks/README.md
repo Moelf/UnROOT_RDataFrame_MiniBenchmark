@@ -83,9 +83,8 @@ gives the same times as running with `root simple.C+`
 void simple() {
    TFile *f = TFile::Open("../uncompressed_Run2012BC_DoubleMuParked_Muons.root");
    TTree *tree = (TTree*)(f->Get("Events"));
-   tree->SetBranchStatus("*", 0);           // limit read branches
-   tree->SetBranchStatus("nMuon", 1);       // though I didn't notice a difference
-   tree->SetBranchStatus("Muon_pt", 1);     // ...but just in case
+   tree->SetBranchStatus("*", 0);
+   tree->SetBranchStatus("Muon_pt", 1);
    float Muon_pt_[30];
    TBranch *b_Muon_pt_ = tree->GetBranch("Muon_pt");
    b_Muon_pt_->SetAddress(&Muon_pt_);
@@ -158,8 +157,8 @@ Times are in seconds and were collected warm/after a couple of sequential runs. 
 
 |      | julia  | C++ `TTreeReader` interpreted | C++ `TTreeReader` compiled | C++ `SetAddress` compiled | C++ `RDataFrame` compiled | uproot |
 | ---- | ------ | ----------------------------- | -------------------------- | ------------------------- | ------------------------- | ------ |
-| none | 2.084  | 11.200                        | 7.260                      | 3.500                     | 9.150                     | 1.958  |
-| zlib | 7.075  | 15.560                        | 11.730                     | 8.110                     | 13.640                    | 6.569  |
-| lz4  | 3.056  | 11.300                        | 7.620                      | 3.740                     | 9.498                     | 2.797  |
+| none | 2.084  | 11.200                        | 7.260                      | 3.310                     | 9.150                     | 1.958  |
+| zlib | 7.075  | 15.560                        | 11.730                     | 7.870                     | 13.640                    | 6.569  |
+| lz4  | 3.056  | 11.300                        | 7.620                      | 3.660                     | 9.498                     | 2.797  |
 | lzma | 44.718 | 52.660                        | 49.550                     | 45.520                    | 51.655                    | 42.148 |
 
