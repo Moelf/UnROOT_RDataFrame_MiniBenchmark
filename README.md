@@ -1,14 +1,25 @@
 # Benchmark Summary
 
 See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks) for comparing mostly the read/interpretation speed between ROOT and Julia.
-## Results:
-### Single-threaded (cold run):
-- [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb): 20.58 s
-- [PyROOT in Jupyter](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) (PyROOT): 40.21 s
-- Compiled ROOT loop: 28.16 s
-- Compiled ROOT RDataFrame: 19.82 s
 
-See full results and scripts to verify for yourself: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)
+## Results:
+### Single-threaded composite benchmark
+| Language | Cold Run | Warmed Run |
+| -------- | -------- | ---------- |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 20.58 s | 19.81 s |
+| [PyROOT](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | 40.21 s | N/A |
+| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 28.16 s | N/A |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 19.82 s | N/A |
+
+### 4-threaded composite benchmark
+| Language | Cold Run | Warmed Run |
+| -------- | -------- | ---------- |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 5.46 s | 5.07 s |
+| PyROOT |N/A | N/A |
+| Compiled C++ ROOT Loop | N/A | N/A |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 5.64 s | N/A |
+
+See source code: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)
 
 (all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/df103_NanoAODHiggsAnalysis_python.h))
 
