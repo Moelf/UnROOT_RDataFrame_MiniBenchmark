@@ -62,7 +62,7 @@ function MT_main(mytree)
 
         filter_z_candidates(Z_mass) || continue
         h_mass = compute_higgs_mass_4l(Z_idx, pts, etas, phis, masses)
-        push!(H, h_mass)
+        atomic_push!(H, h_mass)
     end
     H
 end
