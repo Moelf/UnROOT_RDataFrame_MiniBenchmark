@@ -4,7 +4,7 @@ using Pkg
 Pkg.activate(@__DIR__)
 Pkg.instantiate()
 
-using UnROOT, FHist, Polyester, LVCyl
+using UnROOT, FHist, LorentzVectorHEP
 include("./UnROOT_benchmark_utils.jl")
 
 
@@ -12,7 +12,7 @@ const t = LazyTree(ROOTFile("./Run2012BC_DoubleMuParked_Muons.root"), "Events")
 
 function main(mytree)
     H = Hist1D(Float64; bins = range(70, 180; length=36), overflow=true)
-    @time for evt in mytree
+    for evt in mytree
         evt.nMuon != 4 && continue
 
         pts, etas  = evt.Muon_pt, evt.Muon_eta
@@ -37,14 +37,13 @@ function main(mytree)
 end
 
 @info "1st run"
-main(t)
-sleep(3)
+@time main(t)
 @info "2nd run"
-main(t)
+@time main(t)
 
 function MT_main(mytree)
     H = Hist1D(Float64; bins = range(70, 180; length=36), overflow=true)
-    @time @batch for evt in mytree
+    Threads.@threads for evt in mytree
         evt.nMuon != 4 && continue
 
         pts, etas  = evt.Muon_pt, evt.Muon_eta
@@ -69,6 +68,6 @@ function MT_main(mytree)
 end
 
 @info "4-threads 1st run"
-MT_main(t)
+@time MT_main(t)
 @info "4-threads 2nd run"
-MT_main(t)
+@time MT_main(t)
