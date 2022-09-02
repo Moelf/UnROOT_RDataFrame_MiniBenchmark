@@ -4,36 +4,37 @@ Putting the `.root` from http://opendata.web.cern.ch/record/12341/files/Run2012B
 
 ### Julia
 ```
-$> julia -t 4 ./UnROOT_loop.jl
-  Activating project at `~/Documents/github/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks`
+~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ julia -t 4 ./UnROOT_loop.jl 
+  Activating project at `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks`
 [ Info: 1st run
- 20.581089 seconds (20.09 M allocations: 21.143 GiB, 14.27% gc time, 1.08% compilation time)
+ 15.836218 seconds (20.07 M allocations: 16.459 GiB, 3.12% gc time, 4.29% compilation time)
 [ Info: 2nd run
- 19.808003 seconds (17.41 M allocations: 21.007 GiB, 14.55% gc time)
+ 14.876444 seconds (17.40 M allocations: 16.328 GiB, 1.71% gc time)
 [ Info: 4-threads 1st run
-  5.462921 seconds (17.48 M allocations: 21.795 GiB, 4.64% gc time)
+  5.997804 seconds (18.28 M allocations: 16.973 GiB, 8.68% gc time, 3.81% compilation time)
 [ Info: 4-threads 2nd run
-  5.065520 seconds (17.41 M allocations: 21.791 GiB, 1.20% gc time)
+  5.102895 seconds (17.40 M allocations: 16.934 GiB, 1.74% gc time)
 ```
 
-### PyROOT RDataFrame (interactive)
+### PyROOT RDataFrame
 ```
-$> python PyROOT_RDataFrame.py 
-40.20841431617737 seconds
+~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ python PyROOT_RDataFrame.py 
+43.55262041091919 seconds
 ```
 
 ### ROOT RDataFrame (g++ compiled)
 ```
-$> g++ RDataFrame_benchmark_compiled_single.cpp -O2 `root-config --cflags --glibs` -o run; ./run
-Real time 0:00:19.823, CP time 19.800
-$> g++ RDataFrame_benchmark_compiled_MT.cpp -O2 `root-config --cflags --glibs` -o run; ./run
-Real time 0:00:05.644, CP time 21.940
+g++ RDataFrame_benchmark_compiled_single.cpp -O2 `root-config --cflags --glibs` -o 
+run; ./run
+Real time 0:00:25.038, CP time 25.040
+
+~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ g++ RDataFrame_benchmark_compiled_MT.cpp -O2 `root-config --cflags --glibs` -o run;
+ ./run
+Real time 0:00:16.099, CP time 51.210
 ```
 
 ### ROOT for-loop (g++ compiled)
 ```
-$> g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run; ./run
-Warning in <TStreamerInfo::Build>: Due to some major, backward-incompatible improvements planned for ROOT::RVec, direct I/O of ROOT::RVec objects will break between v6.24 and v6.26. Please use std::vectors instead. See the release notes of v6.24 for more information.
-Warning in <TStreamerInfo::Build>: Due to some major, backward-incompatible improvements planned for ROOT::RVec, direct I/O of ROOT::RVec objects will break between v6.24 and v6.26. Please use std::vectors instead. See the release notes of v6.24 for more information.
-Real time 0:00:28.157, CP time 28.120
+~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run; ./run
+Real time 0:00:33.321, CP time 33.320
 ```
