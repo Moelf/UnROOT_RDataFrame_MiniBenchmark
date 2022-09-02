@@ -6,7 +6,7 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 ### Single-threaded composite benchmark
 | Language | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | -------- | ---------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 15.90 s | 14.91 s |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 15.84 s | 14.70 s |
 | [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | 43.74 s | -- |
 | [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 33.04 s | -- |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 24.77 s | -- |
@@ -14,7 +14,7 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 ### 4-threaded composite benchmark
 | Language | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | -------- | ---------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 6.08 s | 5.21 s |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 5.76 s | 5.17 s |
 | PyROOT RDF |Not impl.| Not impl. |
 | Compiled C++ ROOT Loop | Not impl. | Not impl. |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 11.61 s | -- |
@@ -29,14 +29,14 @@ login02.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $
 ROOT Version: 6.26/07
 
 julia> versioninfo()
-Julia Version 1.7.3
-Commit 742b9abb4d (2022-05-06 12:58 UTC)
+Julia Version 1.8.0
+Commit 5544a0fab76 (2022-08-17 13:38 UTC)
 Platform Info:
-  OS: Linux (x86_64-pc-linux-gnu)
-  CPU: AMD EPYC 7402 24-Core Processor
+  OS: Linux (x86_64-linux-gnu)
+  CPU: 96 × AMD EPYC 7402 24-Core Processor
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-12.0.1 (ORCJIT, znver2)
+  LLVM: libLLVM-13.0.1 (ORCJIT, znver2)
 ```
 
 ```julia
