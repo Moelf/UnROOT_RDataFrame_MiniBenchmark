@@ -4,48 +4,47 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 
 ## Results:
 ### Single-threaded composite benchmark
-| Language | Cold Run | Warmed Run |
+| Language | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | -------- | ---------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 20.58 s | 19.81 s |
-| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | 40.21 s | N/A |
-| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 28.16 s | N/A |
-| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 19.82 s | N/A |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 15.90 s | 14.91 s |
+| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | 43.74 s | -- |
+| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 33.04 s | -- |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 24.77 s | -- |
 
 ### 4-threaded composite benchmark
-| Language | Cold Run | Warmed Run |
+| Language | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | -------- | ---------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 5.46 s | 5.07 s |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 6.08 s | 5.21 s |
 | PyROOT RDF |N/A | N/A |
 | Compiled C++ ROOT Loop | N/A | N/A |
-| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 5.64 s | N/A |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 11.61 s | N/A |
 
 See source code: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)
 
 (all heavy lifting functions used by RDataFrame are written in C++ inside [header file](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/df103_NanoAODHiggsAnalysis_python.h))
 
-## Specs:
+## Specs and library versions:
 ```
-Julia Version 1.7.0-beta4
-Commit d0c90f37ba (2021-08-24 12:35 UTC)
+login02.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ root --version
+ROOT Version: 6.26/07
+
+julia> versioninfo()
+Julia Version 1.7.3
+Commit 742b9abb4d (2022-05-06 12:58 UTC)
 Platform Info:
   OS: Linux (x86_64-pc-linux-gnu)
-  CPU: AMD Ryzen 9 3900X 12-Core Processor
+  CPU: AMD EPYC 7402 24-Core Processor
   WORD_SIZE: 64
   LIBM: libopenlibm
   LLVM: libLLVM-12.0.1 (ORCJIT, znver2)
-Environment:
-  JULIA_NUM_THREADS = 4
 ```
-- 64GB Main Memory @ 3000 MHz
 
 ```julia
 (composite_benchmarks) pkg> st
-      Status
-  [68837c9b] FHist v0.6.1
-  [7073ff75] IJulia v1.23.2
-  [3a55db76] LVCyl v0.1.0 `https://github.com/JuliaHEP/LVCyl.jl#master`
-  [f517fe37] Polyester v0.5.1
-  [3cd96dde] UnROOT v0.6.2
+      Status `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks/Project.toml`
+  [68837c9b] FHist v0.8.6
+  [f612022c] LorentzVectorHEP v0.1.3
+  [3cd96dde] UnROOT v0.8.11
 ```
 ## Physics Task:
 Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)
