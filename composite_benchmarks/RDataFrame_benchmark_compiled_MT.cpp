@@ -42,6 +42,9 @@ TH1D RDataFrame_benchmark_compiled_MT(){
   TH1D h = df_h_bkg_4mu.GetValue();
   sw.Stop();
   sw.Print("m");
+  std::cout << h.Integral() << std::endl;
+  std::cout << h.GetBinContent(0) << std::endl;
+  std::cout << h.GetBinContent(1) << std::endl;
   return h;
 }
 

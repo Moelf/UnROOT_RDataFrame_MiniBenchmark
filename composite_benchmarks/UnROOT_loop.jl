@@ -7,12 +7,10 @@ Pkg.instantiate()
 using UnROOT, FHist, LorentzVectorHEP
 include("./UnROOT_benchmark_utils.jl")
 
-
-const t = LazyTree(ROOTFile("./Run2012BC_DoubleMuParked_Muons.root"), "Events")
-
-function main(mytree)
-    H = Hist1D(Float64; bins = 60:200, overflow=true)
-    for evt in mytree
+_t() = LazyTree(ROOTFile("./Run2012BC_DoubleMuParked_Muons.root"), "Events")
+function main(t)
+    H = Hist1D(Float64; bins = range(70, 180; length=36), overflow=true)
+    @time for evt in t
         evt.nMuon != 4 && continue
 
         pts, etas  = evt.Muon_pt, evt.Muon_eta
@@ -37,13 +35,13 @@ function main(mytree)
 end
 
 @info "1st run"
-@showtime main(t)
+main(_t())
 @info "2nd run"
-@showtime main(t)
+main(_t())
 
-function MultiThread_main(mytree)
-    H = Hist1D(Float64; bins = 60:200, overflow=true)
-    Threads.@threads for evt in mytree
+function MultiThread_main(t)
+    H = Hist1D(Float64; bins = range(70, 180; length=37), overflow=true)
+    @time Threads.@threads for evt in t
         evt.nMuon != 4 && continue
 
         pts, etas  = evt.Muon_pt, evt.Muon_eta
@@ -68,6 +66,6 @@ function MultiThread_main(mytree)
 end
 
 @info "4-threads 1st run"
-@showtime MultiThread_main(t)
-@info "4-threads 1st run"
-@showtime MultiThread_main(t)
+MultiThread_main(_t())
+@info "4-threads 2nd run"
+MultiThread_main(_t())
