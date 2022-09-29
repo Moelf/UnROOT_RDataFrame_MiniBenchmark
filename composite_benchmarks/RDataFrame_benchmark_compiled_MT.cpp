@@ -4,7 +4,7 @@
 #include <TCanvas.h>
 #include <TStopwatch.h>
 
-int main() {
+TH1D RDataFrame_benchmark_compiled_MT(){
   ROOT::EnableImplicitMT(4);
   auto df_bkg_4mu = ROOT::RDataFrame("Events", "Run2012BC_DoubleMuParked_Muons.root");
 
@@ -39,7 +39,14 @@ int main() {
 
   TStopwatch sw;
   sw.Start();
-  df_h_bkg_4mu.GetValue();
+  TH1D h = df_h_bkg_4mu.GetValue();
   sw.Stop();
   sw.Print("m");
+  return h;
 }
+
+int main() {
+    RDataFrame_benchmark_compiled_MT();
+    return 0;
+}
+

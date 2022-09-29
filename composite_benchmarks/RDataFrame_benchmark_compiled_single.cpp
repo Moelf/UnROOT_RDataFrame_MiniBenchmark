@@ -4,7 +4,7 @@
 #include <TCanvas.h>
 #include <TStopwatch.h>
 
-int main() {
+TH1D RDataFrame_benchmark_compiled_single() {
   auto df_bkg_4mu = ROOT::RDataFrame("Events", "Run2012BC_DoubleMuParked_Muons.root");
 
   // Filter interesting events
@@ -38,7 +38,16 @@ int main() {
 
   TStopwatch sw;
   sw.Start();
-  df_h_bkg_4mu.GetValue();
+  TH1D h = df_h_bkg_4mu.GetValue();
   sw.Stop();
   sw.Print("m");
+  std::cout<<h.Integral()<<std::endl;
+  std::cout<<h.GetBinContent(0)<<std::endl;
+  std::cout<<h.GetBinContent(1)<<std::endl;
+  return h;
+}
+
+int main(){
+    RDataFrame_benchmark_compiled_single();
+    return 0;
 }

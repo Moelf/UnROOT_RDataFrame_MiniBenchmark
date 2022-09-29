@@ -11,7 +11,7 @@ include("./UnROOT_benchmark_utils.jl")
 const t = LazyTree(ROOTFile("./Run2012BC_DoubleMuParked_Muons.root"), "Events")
 
 function main(mytree)
-    H = Hist1D(Float64; bins = range(70, 180; length=36), overflow=true)
+    H = Hist1D(Float64; bins = 60:200, overflow=true)
     for evt in mytree
         evt.nMuon != 4 && continue
 
@@ -37,12 +37,12 @@ function main(mytree)
 end
 
 @info "1st run"
-@time main(t)
+@showtime main(t)
 @info "2nd run"
-@time main(t)
+@showtime main(t)
 
-function MT_main(mytree)
-    H = Hist1D(Float64; bins = range(70, 180; length=36), overflow=true)
+function MultiThread_main(mytree)
+    H = Hist1D(Float64; bins = 60:200, overflow=true)
     Threads.@threads for evt in mytree
         evt.nMuon != 4 && continue
 
@@ -68,6 +68,6 @@ function MT_main(mytree)
 end
 
 @info "4-threads 1st run"
-@time MT_main(t)
-@info "4-threads 2nd run"
-@time MT_main(t)
+@showtime MultiThread_main(t)
+@info "4-threads 1st run"
+@showtime MultiThread_main(t)
