@@ -15,10 +15,10 @@ int main() {
     t->Branch("nMuon",&nMuon);
 
     RVec<Float_t> Muon_pt, Muon_eta, Muon_phi, Muon_mass;
-    t->Branch("Muon_pt",&Muon_pt);
-    t->Branch("Muon_eta",&Muon_eta);
-    t->Branch("Muon_phi",&Muon_phi);
-    t->Branch("Muon_mass",&Muon_mass);
+    t->SetBranchAddress("Muon_pt",  &Muon_pt);
+    t->SetBranchAddress("Muon_eta", &Muon_eta);
+    t->SetBranchAddress("Muon_phi", &Muon_phi);
+    t->SetBranchAddress("Muon_mass",&Muon_mass);
 
     RVec<Int_t> Muon_charge;
     t->Branch("Muon_charge",&Muon_charge);
