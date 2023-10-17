@@ -4,38 +4,44 @@ Putting the `.root` from http://opendata.web.cern.ch/record/12341/files/Run2012B
 
 ### Julia
 ```
-[00:34] login01.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ julia -t 4 --project=. --startup-file=no ./UnROOT_loop.jl 
-  Activating project at `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks`
+$ julia -t 4 --project=. --startup-file=no ./UnROOT_loop.jl
 [ Info: 1st run
- 15.991890 seconds (20.06 M allocations: 16.459 GiB, 4.23% gc time, 4.09% compilation time)
+ 16.277249 seconds (18.52 M allocations: 16.409 GiB, 1.58% gc time, 3.31% compilation time)
 [ Info: 2nd run
- 15.053849 seconds (17.40 M allocations: 16.328 GiB, 3.06% gc time)
+ 15.484084 seconds (17.27 M allocations: 16.327 GiB, 1.15% gc time)
 [ Info: 4-threads 1st run
-  4.724717 seconds (18.31 M allocations: 16.974 GiB, 6.77% gc time, 4.61% compilation time)
+  4.706499 seconds (17.63 M allocations: 16.956 GiB, 2.39% gc time, 15.78% compilation time)
 [ Info: 4-threads 2nd run
-  4.612587 seconds (17.40 M allocations: 16.934 GiB, 9.48% gc time)
+  4.597590 seconds (17.27 M allocations: 16.933 GiB, 1.80% gc time)
 ```
 
 ### PyROOT RDataFrame
 ```
-~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ python PyROOT_RDataFrame.py 
-43.55262041091919 seconds
+$ python PyROOT_RDataFrame.py
+1-thread:  44.6568386554718 seconds
+1-thread:  40.22056269645691 seconds
+4-threads: 11.021458864212036 seconds
+4-threads: 10.93662428855896 seconds
 ```
 
 ### ROOT RDataFrame (g++ compiled)
 ```
-[00:36] login01.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ g++ RDataFrame_benchmark_compiled
-_single.cpp -O2 `root-config --cflags --glibs` -o run; ./run
-Warning in <UnknownClass::SetDisplay>: DISPLAY not set, setting it to c-24-61-185-63.hsd1.ma.comcast.net:0.0
-./runReal time 0:00:24.940, CP time 24.940
+$ time g++ RDataFrame_benchmark_compiled_single.cpp -O2 `root-config --cflags --glibs` -o run;
+real	0m8.359s
+
+#warm up once
+$ g++ RDataFrame_benchmark_compiled_single.cpp -O2 `root-config --cflags --glibs` -o run; ./run
+Real time 0:00:24.972, CP time 24.970
 65807
 9809
 3991
 
-[00:39] login01.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ g++ RDataFrame_benchmark_compiled
-_MT.cpp -O2 `root-config --cflags --glibs` -o run; ./run
-Warning in <UnknownClass::SetDisplay>: DISPLAY not set, setting it to c-24-61-185-63.hsd1.ma.comcast.net:0.0
-Real time 0:00:10.237, CP time 39.850
+$ time g++ RDataFrame_benchmark_compiled_MT.cpp -O2 `root-config --cflags --glibs` -o run;
+real	0m8.675s
+
+#warm up once
+$ g++ RDataFrame_benchmark_compiled_MT.cpp -O2 `root-config --cflags --glibs` -o run; ./run
+Real time 0:00:08.731, CP time 34.460
 65807
 9809
 3991
@@ -43,9 +49,11 @@ Real time 0:00:10.237, CP time 39.850
 
 ### ROOT for-loop (g++ compiled)
 ```
-[00:36] login01.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run; ./run
-Warning in <UnknownClass::SetDisplay>: DISPLAY not set, setting it to c-24-61-185-63.hsd1.ma.comcast.net:0.0
-Real time 0:00:19.677, CP time 19.690
+$ time g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run
+real	0m3.582s
+
+$ g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run; ./run
+Real time 0:00:19.975, CP time 19.970
 67537
 9942
 4046

@@ -4,20 +4,20 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 
 ## Results:
 ### Single-threaded composite benchmark
-| Language | 1st Run | 2nd Run (JIT time excluded)|
-| -------- | -------- | ---------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 15.99 s | 15.05 s |
-| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | 43.74 s | -- |
-| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 19.53 s | -- |
-| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 24.94 s | -- |
+| Language | Compile time | 1st Run | 2nd Run (JIT time excluded)|
+| -------- | ------------ | ------- | ---------- |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | -- | 16.27 s | 15.48 s |
+| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | -- | 44.66 s | 40.22 s |
+| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 3.58 s | 19.96 s | -- |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 8.35 s | 24.97 s | -- |
 
 ### 4-threaded composite benchmark
-| Language | 1st Run | 2nd Run (JIT time excluded)|
-| -------- | -------- | ---------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | 4.72 s | 4.61 s |
-| PyROOT RDF |Not impl.| Not impl. |
-| Compiled C++ ROOT Loop | Not impl. | Not impl. |
-| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 10.23 s | -- |
+| Language | Compile | 1st Run | 2nd Run (JIT time excluded)|
+| -------- | ------- | ------- | ---------- |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | -- | 4.71 s | 4.60 s |
+| PyROOT RDF | -- | 11.02 s | 10.94 s |
+| Compiled C++ ROOT Loop |  Not impl. | -- | -- |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 8.68 s | 10.23 s | -- |
 
 See source code: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)
 
@@ -25,26 +25,27 @@ See source code: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFram
 
 ## Specs and library versions:
 ```
-login01.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ root --version
-ROOT Version: 6.26/07
+$ root --version
+ROOT Version: 6.28/09
 
 julia> versioninfo()
-Julia Version 1.8.1
-Commit afb6c60d69a (2022-09-06 15:09 UTC)
+Julia Version 1.9.2
+Commit e4ee485e909 (2023-07-05 09:39 UTC)
 Platform Info:
   OS: Linux (x86_64-linux-gnu)
   CPU: 96 × AMD EPYC 7402 24-Core Processor
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-13.0.1 (ORCJIT, znver2)
+  LLVM: libLLVM-14.0.6 (ORCJIT, znver2)
+  Threads: 4 on 96 virtual cores
 ```
 
 ```julia
 (composite_benchmarks) pkg> st
-      Status `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks/Project.toml`
-  [68837c9b] FHist v0.8.7
-  [f612022c] LorentzVectorHEP v0.1.3
-  [3cd96dde] UnROOT v0.8.12
+Status `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks/Project.toml`
+  [68837c9b] FHist v0.10.2
+  [f612022c] LorentzVectorHEP v0.1.6
+  [3cd96dde] UnROOT v0.10.18
 ```
 ## Physics Task:
 Make a histogram of 4-lepton invariant mass (higgs candidate in real analysis)

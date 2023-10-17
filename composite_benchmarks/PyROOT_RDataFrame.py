@@ -41,11 +41,24 @@ def reco_higgs_to_4mu(df):
     return df_h_mass
 
 df_bkg_4mu = ROOT.RDataFrame("Events", "./Run2012BC_DoubleMuParked_Muons.root")
-
 df_bkg_4mu_reco = reco_higgs_to_4mu(df_bkg_4mu)
-
 df_h_bkg_4mu = df_bkg_4mu_reco.Histo1D(("h_bkg_4mu", "", 36, 70, 180), "H_mass")
-
 start_time = time.time()
 df_h_bkg_4mu.GetValue()
-print("%s seconds" % (time.time() - start_time))
+print("1-thread:  %s seconds" % (time.time() - start_time))
+df_h_bkg_4mu = df_bkg_4mu_reco.Histo1D(("h_bkg_4mu", "", 36, 70, 180), "H_mass")
+start_time = time.time()
+df_h_bkg_4mu.GetValue()
+print("1-thread:  %s seconds" % (time.time() - start_time))
+
+ROOT.ROOT.EnableImplicitMT(4)
+df_bkg_4mu = ROOT.RDataFrame("Events", "./Run2012BC_DoubleMuParked_Muons.root")
+df_bkg_4mu_reco = reco_higgs_to_4mu(df_bkg_4mu)
+df_h_bkg_4mu = df_bkg_4mu_reco.Histo1D(("h_bkg_4mu", "", 36, 70, 180), "H_mass")
+start_time = time.time()
+df_h_bkg_4mu.GetValue()
+print("4-threads: %s seconds" % (time.time() - start_time))
+df_h_bkg_4mu = df_bkg_4mu_reco.Histo1D(("h_bkg_4mu", "", 36, 70, 180), "H_mass")
+start_time = time.time()
+df_h_bkg_4mu.GetValue()
+print("4-threads: %s seconds" % (time.time() - start_time))
