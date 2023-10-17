@@ -7,7 +7,7 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 | Language | Compile time | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | ------------ | ------- | ---------- |
 | [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | -- | 16.27 s | 15.48 s |
-| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | -- | 44.16 s | -- |
+| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/RDataFrame_benchmark.ipynb) | -- | 44.66 s | 40.22 s |
 | [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 3.58 s | 19.96 s | -- |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 8.35 s | 24.97 s | -- |
 
@@ -15,8 +15,8 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 | Language | Compile | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | ------- | ------- | ---------- |
 | [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | -- | 4.71 s | 4.60 s |
-| PyROOT RDF | -- | 13.43 s | -- |
-| Compiled C++ ROOT Loop | Not impl. | -- |
+| PyROOT RDF | -- | 11.02 s | 10.94 s |
+| Compiled C++ ROOT Loop |  Not impl. | -- | -- |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 8.68 s | 10.23 s | -- |
 
 See source code: [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)

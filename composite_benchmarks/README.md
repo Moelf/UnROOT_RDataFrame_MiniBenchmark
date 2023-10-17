@@ -17,19 +17,27 @@ $ julia -t 4 --project=. --startup-file=no ./UnROOT_loop.jl
 
 ### PyROOT RDataFrame
 ```
-$ time python PyROOT_RDataFrame.py
-1-thread:  44.15873837471008 seconds
-4-threads: 13.432786464691162 seconds
+$ python PyROOT_RDataFrame.py
+1-thread:  44.6568386554718 seconds
+1-thread:  40.22056269645691 seconds
+4-threads: 11.021458864212036 seconds
+4-threads: 10.93662428855896 seconds
 ```
 
 ### ROOT RDataFrame (g++ compiled)
 ```
+$ time g++ RDataFrame_benchmark_compiled_single.cpp -O2 `root-config --cflags --glibs` -o run;
+real	0m8.359s
+
 #warm up once
 $ g++ RDataFrame_benchmark_compiled_single.cpp -O2 `root-config --cflags --glibs` -o run; ./run
 Real time 0:00:24.972, CP time 24.970
 65807
 9809
 3991
+
+$ time g++ RDataFrame_benchmark_compiled_MT.cpp -O2 `root-config --cflags --glibs` -o run;
+real	0m8.675s
 
 #warm up once
 $ g++ RDataFrame_benchmark_compiled_MT.cpp -O2 `root-config --cflags --glibs` -o run; ./run
@@ -42,7 +50,6 @@ Real time 0:00:08.731, CP time 34.460
 ### ROOT for-loop (g++ compiled)
 ```
 $ time g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run
-
 real	0m3.582s
 
 $ g++ ROOT_loop_compiled.cpp -O2 `root-config --cflags --glibs` -o run; ./run
