@@ -3,7 +3,7 @@
 See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/simple_benchmarks) for comparing mostly the read/interpretation speed between ROOT and Julia.
 
 ## Results:
-### Single-threaded composite benchmark
+### Single-thread composite benchmark
 | Language | Compile time | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | ------------ | ------- | ---------- |
 | [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | -- | 16.27 s | 15.48 s |
@@ -11,7 +11,7 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 | [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks#root-rdataframe-g-compiled) | 3.58 s | 19.96 s | -- |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 8.35 s | 24.97 s | -- |
 
-### 4-threaded composite benchmark
+### 4-threads composite benchmark
 | Language | Compile | 1st Run | 2nd Run (JIT time excluded)|
 | -------- | ------- | ------- | ---------- |
 | [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/master/UnROOT_benchmark.ipynb) | -- | 4.71 s | 4.60 s |
