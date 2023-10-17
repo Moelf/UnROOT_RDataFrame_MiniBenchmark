@@ -124,7 +124,7 @@ since Go compiles to `ccall()`-able libraries nicely.
 
 # Backups: Mini Benchmarking {#sec:minibench}
 To understand if we're doing anything "stupid" in our naive implementation, we
-made [benchmarks](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/master/composite_benchmarks)
+made [benchmarks](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks)
 comparing the performance of `UnROOT` with solutions provided by ROOT:
 
 |              | Time (s)    |
