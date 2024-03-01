@@ -6,18 +6,18 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 ### Single-thread composite benchmark
 | Language | Run Time |
 | -------- | -------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/UnROOT_benchmark.ipynb) | 15.48 s |
-| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/RDataFrame_benchmark.ipynb) | 40.22 s |
-| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks#root-rdataframe-g-compiled) | 19.96 s |
-| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 24.97 s |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/UnROOT_benchmark.ipynb) | 19.67 s |
+| [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/RDataFrame_benchmark.ipynb) | 38.97 s |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 25.04 s |
+| [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks#root-rdataframe-g-compiled) | 19.63 s |
 
 ### 4-threads composite benchmark
 | Language | Run Time |
 | -------- | -------- |
-| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/UnROOT_benchmark.ipynb) | 4.60 s |
-| PyROOT RDF | 10.94 s |
+| [Julia](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/UnROOT_benchmark.ipynb) | 5.25 s |
+| PyROOT RDF | 11.01 s |
+| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 8.67 s |
 | Compiled C++ ROOT Loop | Not impl. |
-| [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 10.23 s |
 
 For more timing (compile, JIT etc.), navigate to [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks) directory.
 
@@ -51,24 +51,30 @@ minimized based on: https://root.cern/doc/main/df103__NanoAODHiggsAnalysis_8py.h
 ## Specs and library versions:
 ```
 $ root --version
-ROOT Version: 6.28/09
+ROOT Version: 6.30/05
+Built for linuxx8664gcc on Mar 01 2024, 00:06:39
+From heads/v6-30-00-patches@v6-30-04-28-g4462606
+
 
 julia> versioninfo()
-Julia Version 1.9.2
-Commit e4ee485e909 (2023-07-05 09:39 UTC)
+Julia Version 1.10.0
+Commit 3120989f39b (2023-12-25 18:01 UTC)
+Build Info:
+  Official https://julialang.org/ release
 Platform Info:
   OS: Linux (x86_64-linux-gnu)
   CPU: 96 × AMD EPYC 7402 24-Core Processor
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-14.0.6 (ORCJIT, znver2)
-  Threads: 4 on 96 virtual cores
+  LLVM: libLLVM-15.0.7 (ORCJIT, znver2)
+  Threads: 5 on 96 virtual cores # 4 threads for running tasks
 ```
 
 ```julia
 (composite_benchmarks) pkg> st
 Status `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks/Project.toml`
-  [68837c9b] FHist v0.10.2
+  [68837c9b] FHist v0.10.9
   [f612022c] LorentzVectorHEP v0.1.6
-  [3cd96dde] UnROOT v0.10.18
+  [811555cd] ThreadPinning v0.7.22
+  [3cd96dde] UnROOT v0.10.23
 ```

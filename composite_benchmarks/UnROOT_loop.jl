@@ -4,7 +4,8 @@ using Pkg
 Pkg.activate(@__DIR__)
 Pkg.instantiate()
 
-using UnROOT, FHist, LorentzVectorHEP
+using UnROOT, FHist, LorentzVectorHEP, ThreadPinning
+pinthreads(:cores)
 include("./UnROOT_benchmark_utils.jl")
 
 _t() = LazyTree(ROOTFile("./Run2012BC_DoubleMuParked_Muons.root"), "Events")

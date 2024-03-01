@@ -1,4 +1,5 @@
 [deps]
 FHist = "68837c9b-b678-4cd5-9925-8a54edc8f695"
 LorentzVectorHEP = "f612022c-142a-473f-8cfd-a09cf3793c6c"
+ThreadPinning = "811555cd-349b-4f26-b7bc-1f208b848042"
 UnROOT = "3cd96dde-e98d-4713-81e9-a4a1b0235ce9"
