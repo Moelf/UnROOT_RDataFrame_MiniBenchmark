@@ -10,6 +10,8 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 | [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/RDataFrame_benchmark.ipynb) | 38.97 s |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 25.04 s |
 | [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks#root-rdataframe-g-compiled) | 19.63 s |
+| [Python Uproot loop-less](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks#uproot-loop-less) | 29.13 s |
+
 
 ### 4-threads composite benchmark
 | Language | Run Time |
@@ -18,6 +20,7 @@ See also: the [simple benchmark](https://github.com/Moelf/UnROOT_RDataFrame_Mini
 | PyROOT RDF | 11.01 s |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 8.67 s |
 | Compiled C++ ROOT Loop | Not impl. |
+| Python Uproot loop-less | Not impl. |
 
 For more timing (compile, JIT etc.), navigate to [composite_benchmark](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks) directory.
 
@@ -39,7 +42,7 @@ julia> mytree
 ```
 
 ### Steps
-minimized based on: https://root.cern/doc/main/df103__NanoAODHiggsAnalysis_8py.html
+minimized based on: https://root.cern/doc/v632/df103__NanoAODHiggsAnalysis_8py.html
 1. `nMuon == 4`.
 2. All muon has `pt > 5` and `abs(eta) < 2.4`.
 3. Sum of `Muon_charge` equals 0.
@@ -57,8 +60,8 @@ From heads/v6-30-00-patches@v6-30-04-28-g4462606
 
 
 julia> versioninfo()
-Julia Version 1.10.0
-Commit 3120989f39b (2023-12-25 18:01 UTC)
+Julia Version 1.10.3
+Commit 0b4590a5507 (2024-04-30 10:59 UTC)
 Build Info:
   Official https://julialang.org/ release
 Platform Info:
@@ -67,14 +70,14 @@ Platform Info:
   WORD_SIZE: 64
   LIBM: libopenlibm
   LLVM: libLLVM-15.0.7 (ORCJIT, znver2)
-  Threads: 5 on 96 virtual cores # 4 threads for running tasks
+Threads: 4 default, 0 interactive, 2 GC (on 96 virtual cores)
 ```
 
 ```julia
 (composite_benchmarks) pkg> st
 Status `~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks/Project.toml`
-  [68837c9b] FHist v0.10.9
+  [68837c9b] FHist v0.11.4
   [f612022c] LorentzVectorHEP v0.1.6
   [811555cd] ThreadPinning v0.7.22
-  [3cd96dde] UnROOT v0.10.23
+  [3cd96dde] UnROOT v0.10.30
 ```
