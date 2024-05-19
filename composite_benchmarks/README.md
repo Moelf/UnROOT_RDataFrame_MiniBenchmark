@@ -6,6 +6,7 @@
 | [PyROOT RDF](https://nbviewer.jupyter.org/github/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/RDataFrame_benchmark.ipynb) | -- | 43.77 s | 38.97 s |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_single.cpp) | 8.23 s | -- | 25.04 s |
 | [Compiled C++ ROOT Loop](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks#root-rdataframe-g-compiled) | 3.65 s | -- | 19.63 s |
+| [Python Uproot loop-less](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/tree/main/composite_benchmarks#uproot-loop-less) | -- | -- | 29.13 s |
 
 ### 4-threads composite benchmark
 | Language | Compile | 1st Run (including JIT time) | 2nd Run |
@@ -14,6 +15,7 @@
 | PyROOT RDF | -- | 11.07 s | 11.01 s |
 | [Compiled RDF](https://github.com/Moelf/UnROOT_RDataFrame_MiniBenchmark/blob/main/composite_benchmarks/RDataFrame_benchmark_compiled_MT.cpp) | 8.27 s | -- | 8.67 s |
 | Compiled C++ ROOT Loop |  Not impl. | -- | -- |
+| Python Uproot loop-less | Not impl. | -- | -- |
 
 ## How-to reproduce
 
@@ -71,4 +73,15 @@ $ ./run
 Real time 0:00:19.636, CP time 19.630
 $ ./run
 Real time 0:00:19.664, CP time 19.660
+```
+
+### Uproot loop less
+```
+# also see requirements.txt
+login04.af.uchicago.edu:~/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks $ python Python_uproot.py
+/home/jiling/UnROOT_RDataFrame_MiniBenchmark/composite_benchmarks/uproot_env/lib64/python3.9/site-packages/coffea/nanoevents/methods/candidate.py:11: FutureWarning: In version 2024.7.0 (target date: 2024-06-30 11:59:59-05:00), this will be an error.
+...
+
+1-thread:
+0:00:29.135526
 ```
