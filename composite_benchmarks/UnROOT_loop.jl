@@ -10,7 +10,7 @@ include("./UnROOT_benchmark_utils.jl")
 
 _t() = LazyTree(ROOTFile("./Run2012BC_DoubleMuParked_Muons.root"), "Events")
 function main(t)
-    H = Hist1D(Float64; bins = range(70, 180; length=36), overflow=true)
+    H = Hist1D(; binedges = range(70, 180; length=36), overflow=true)
     @time for evt in t
         evt.nMuon != 4 && continue
 
@@ -41,7 +41,7 @@ main(_t())
 main(_t())
 
 function MultiThread_main(t)
-    H = Hist1D(Float64; bins = range(70, 180; length=37), overflow=true)
+    H = Hist1D(; binedges = range(70, 180; length=36), overflow=true)
     @time Threads.@threads for evt in t
         evt.nMuon != 4 && continue
 
